@@ -1,5 +1,4 @@
 import html2pdf from "html2pdf.js";
-
 const form = document.getElementById('resume-form') as HTMLFormElement;
 const resumeDisplayElement = document.getElementById('resume-display') as HTMLDivElement;
 const downloadPDFButton = document.getElementById('download-pdf') as HTMLButtonElement;
@@ -36,15 +35,14 @@ function displayResume(data: any) {
     }
 }
 
-// Function to load resume from localStorage
-function loadResume(username: string) {
-    const resumeData = localStorage.getItem(username);
-    if (resumeData) {
-        const data = JSON.parse(resumeData);
-        displayResume(data);
-    } else {
-        alert('Resume not found!');
-    }
+// Function to encode data into URL
+function encodeDataToURL(data: any): string {
+    return encodeURIComponent(JSON.stringify(data));
+}
+
+// Function to decode data from URL
+function decodeDataFromURL(encodedData: string): any {
+    return JSON.parse(decodeURIComponent(encodedData));
 }
 
 // Handle form submission
@@ -75,19 +73,19 @@ form.addEventListener('submit', (event: Event) => {
         pictureURL,
     };
 
-    // Save resume data to localStorage
-    localStorage.setItem(username, JSON.stringify(resumeData));
-
-    // Display the resume
-    displayResume(resumeData);
+    // Encode data into URL
+    const encodedData = encodeDataToURL(resumeData);
 
     // Generate unique URL
     const baseURL = window.location.origin;
-    const uniqueURL = `${baseURL}/resume/${username}`;
+    const uniqueURL = `${baseURL}/resume/${username}?data=${encodedData}`;
     shareableLinkInput.value = uniqueURL;
 
     // Update browser history
     window.history.pushState({ username }, '', uniqueURL);
+
+    // Display the resume
+    displayResume(resumeData);
 });
 
 // Copy link to clipboard
@@ -110,15 +108,19 @@ downloadPDFButton.addEventListener('click', () => {
 // Handle back/forward navigation
 window.onpopstate = (event: PopStateEvent) => {
     if (event.state && event.state.username) {
-        loadResume(event.state.username);
+        const encodedData = new URLSearchParams(window.location.search).get('data');
+        if (encodedData) {
+            const resumeData = decodeDataFromURL(encodedData);
+            displayResume(resumeData);
+        }
     }
 };
 
 // Check URL on page load
 window.onload = () => {
-    const path = window.location.pathname.split('/');
-    const username = path[path.length - 1];
-    if (username) {
-        loadResume(username);
+    const encodedData = new URLSearchParams(window.location.search).get('data');
+    if (encodedData) {
+        const resumeData = decodeDataFromURL(encodedData);
+        displayResume(resumeData);
     }
 };
