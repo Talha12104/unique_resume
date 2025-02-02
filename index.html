@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Resume Builder</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <h1>Dynamic Resume Builder</h1>
+    <form id="resume-form">
+        <fieldset>
+            <legend>Personal Information</legend>
+            <label for="name">Name:</label>
+            <input type="text" id="name" placeholder="Enter Your Name" required>
+
+            <label for="username">Username (for URL):</label>
+            <input type="text" id="username" placeholder="Enter a unique username" required>
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" placeholder="Enter your email" required>
+
+            <label for="phone">Phone Number:</label>
+            <input type="tel" id="phone" placeholder="Enter your phone number" required>
+
+            <label for="picture">Upload Picture:</label>
+            <input type="file" id="picture" accept="image/*">
+        </fieldset>
+        <fieldset>
+            <legend>Education</legend>
+            <label for="education">Education:</label>
+            <textarea name="education" id="education" placeholder="Enter your Education" rows="4" required></textarea>
+        </fieldset>
+        <fieldset>
+            <legend>Experience:</legend>
+            <label for="experience">Experience:</label>
+            <textarea name="experience" id="experience" placeholder="Enter your work experience" rows="4" required></textarea>
+        </fieldset>
+        <fieldset>
+            <legend>Skills:</legend>
+            <label for="skills">Skills:</label>
+            <textarea name="skills" id="skills" placeholder="Enter your Skills" rows="4" required></textarea>
+        </fieldset>
+
+        <button type="submit"><b>Generate Resume</b></button>
+    </form>
+    <br>
+    <div id="resume-display"></div>
+    <div id="share-section" style="display: none;">
+        <h3>Share Your Resume:</h3>
+        <input type="text" id="shareable-link" readonly>
+        <button id="copy-link">Copy Link</button>
+    </div>
+    <button id="download-pdf" style="display: none;">Download PDF</button>
+
+    <!-- Include html2pdf library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
